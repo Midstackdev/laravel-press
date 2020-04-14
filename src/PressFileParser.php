@@ -9,6 +9,7 @@ class PressFileParser
 {
     protected $filename;
     protected $data;
+    protected $rawData;
 
     public function __construct($filename)
     {
@@ -26,17 +27,22 @@ class PressFileParser
         return $this->data;
     }
 
+    public function getRawData()
+    {
+        return $this->rawData;
+    }
+
     protected function splitFile()
     {
         preg_match('/^\-{3}(.*?)\-{3}(.*)/s', 
             File::exists($this->filename) ? File::get($this->filename) : $this->filename, 
-            $this->data
+            $this->rawData
         );
     }
 
     protected function explodeData()
     {
-        foreach (explode("\n", trim($this->data[1])) as $fieldString) {
+        foreach (explode("\n", trim($this->rawData[1])) as $fieldString) {
             preg_match('/(.*):\s?(.*)/', $fieldString, $fieldArray);
 
             // dd($fieldArray);
@@ -44,19 +50,23 @@ class PressFileParser
         }
 
         // dd(trim($this->data[2]));
-        $this->data['body'] = trim($this->data[2]);
+        $this->data['body'] = trim($this->rawData[2]);
     }
 
     protected function processFields()
     {
         foreach ($this->data as $field => $value) {
-            if ($field === 'date') {
-                $this->data[$field] = Carbon::parse($value);
+            
+            $class = ('Midstackdev\\Press\\Fields\\' .ucfirst($field));
+
+            if (! class_exists($class) && ! method_exists($class, 'process')) {
+                $class = ('Midstackdev\\Press\\Fields\\Extra');
             }
 
-            else if ($field === 'body') {
-                $this->data[$field] = MarkdownParser::parse($value);
-            }
+            $this->data = array_merge(
+                $this->data,
+                $class::process($field, $value, $this->data)
+            );
         }
     }
 }
