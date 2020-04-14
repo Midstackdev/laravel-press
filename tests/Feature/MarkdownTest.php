@@ -3,7 +3,7 @@
 namespace Midstackdev\Press\Tests\Feature;
 
 use Midstackdev\Press\MarkdownParser;
-use Orchestra\Testbench\TestCase;
+use Midstackdev\Press\Tests\TestCase;
 use Parsedown;
 
 class MarkdownTest extends TestCase

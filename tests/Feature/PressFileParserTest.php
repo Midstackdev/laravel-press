@@ -5,7 +5,7 @@ namespace Midstackdev\Press\Tests\Feature;
 use Carbon\Carbon;
 use Midstackdev\Press\MarkdownParser;
 use Midstackdev\Press\PressFileParser;
-use Orchestra\Testbench\TestCase;
+use Midstackdev\Press\Tests\TestCase;
 
 class PressFileParserTest extends TestCase
 {
