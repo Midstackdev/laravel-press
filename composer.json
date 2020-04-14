@@ -23,5 +23,12 @@
         "psr-4": {
             "Midstackdev\\Press\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Midstackdev\\Press\\PressBaseServiceProvider"
+            ]
+        }
     }
 }
