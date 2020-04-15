@@ -5,6 +5,7 @@ namespace Midstackdev\Press;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Midstackdev\Press\Console\ProcessCommand;
+use Midstackdev\Press\Facades\Press;
 
 class PressBaseServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,7 @@ class PressBaseServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'press');
 
+        $this->registerFacades();
         $this->registerRoutes();
     }
 
@@ -53,4 +55,18 @@ class PressBaseServiceProvider extends ServiceProvider
             'namespace' => 'Midstackdev\Press\Http\Controllers',
         ];
     }
+
+    protected function registerFacades()
+    {
+        $this->app->singleton('Press', function ($app) {
+            return new \Midstackdev\Press\Press();
+        });
+    }
+
+
+
+
+
+
+    
 }

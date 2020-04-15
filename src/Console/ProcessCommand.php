@@ -3,11 +3,10 @@
 namespace Midstackdev\Press\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Midstackdev\Press\Facades\Press;
 use Midstackdev\Press\Post;
-use Midstackdev\Press\Press;
-use Midstackdev\Press\PressFileParser;
+
 
 class ProcessCommand extends Command
 {

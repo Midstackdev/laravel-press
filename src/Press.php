@@ -4,12 +4,12 @@ namespace Midstackdev\Press;
 
 class Press
 {
-    public static function configNotPublished()
+    public function configNotPublished()
     {
         return is_null(config('press'));
     }
 
-    public static function driver()
+    public function driver()
     {
         $driver = ucfirst(config('press.driver'));
 
@@ -18,7 +18,7 @@ class Press
         return new $class;
     }
 
-    public static function path()
+    public function path()
     {
         return config('press.path', 'blog');
     } 
