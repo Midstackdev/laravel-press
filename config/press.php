@@ -7,4 +7,6 @@ return [
         'path' => 'blogs',
     ],
 
+    'path' => 'blogs',
+
 ];
