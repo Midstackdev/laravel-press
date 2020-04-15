@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Midstackdev\Press\Facades\Press;
 use Midstackdev\Press\Post;
+use Midstackdev\Press\Repositories\PostRepository;
 
 
 class ProcessCommand extends Command
@@ -14,7 +15,7 @@ class ProcessCommand extends Command
 
     protected $description = 'Updates blog posts.';
 
-    public function handle()
+    public function handle(PostRepository $postRepository)
     {
         if (Press::configNotPublished()) {
             return $this->warn('Please publish the config file by running \'php artisan vendor:publish --tag=press-config\'');
@@ -24,17 +25,13 @@ class ProcessCommand extends Command
         try {
             $posts = Press::driver()->fetchPosts();
 
-        
+            $this->info('Number of Posts: ' . count($posts));
             // dd($posts);
         
             foreach ($posts as $post) {
-                Post::insert([
-                    'identifier' => $post['identifier'],
-                    'title' => $post['title'],
-                    'slug' => Str::slug($post['title']),
-                    'body' => $post['body'],
-                    'extra' => $post['extra'] ?? []
-                ]);
+                $postRepository->save($post);
+
+                $this->info('Post: ' . $post['title']);
             }
         } catch (\Exception $e) {
             $this->error($e->getMessage());
