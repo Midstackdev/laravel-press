@@ -4,6 +4,8 @@ namespace Midstackdev\Press;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Midstackdev\Press\Facades\Press;
+use ReflectionClass;
 
 class PressFileParser 
 {
@@ -57,7 +59,7 @@ class PressFileParser
     {
         foreach ($this->data as $field => $value) {
             
-            $class = ('Midstackdev\\Press\\Fields\\' .ucfirst($field));
+            $class = $this->getField(ucfirst($field));
 
             if (! class_exists($class) && ! method_exists($class, 'process')) {
                 $class = ('Midstackdev\\Press\\Fields\\Extra');
@@ -69,4 +71,21 @@ class PressFileParser
             );
         }
     }
+
+
+    private function getField($field)
+    {
+        foreach (Press::availableFields() as $availableField) {
+            $class = new ReflectionClass($availableField);
+
+            if ($class->getShortName() == $field) {
+                return $class->getName();
+            }
+        }
+    }
+
+
+
+
+
 }

@@ -32,6 +32,7 @@ class PressBaseServiceProvider extends ServiceProvider
 
         $this->registerFacades();
         $this->registerRoutes();
+        $this->registerFields();
     }
 
     protected function registerPublishing()
@@ -39,6 +40,10 @@ class PressBaseServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/press.php' => config_path('press.php'),
         ], 'press-config');
+
+        $this->publishes([
+            __DIR__.'/Console/stubs/PressServiceProvider.stub' => app_path('Providers/PressServiceProvider.php'),
+        ], 'press-provider');
     }
 
     protected function registerRoutes()
@@ -63,10 +68,21 @@ class PressBaseServiceProvider extends ServiceProvider
         });
     }
 
+    protected function registerFields()
+    {
+        Press::fields([
+            Fields\Body::class,
+            Fields\Date::class,
+            Fields\Description::class,
+            Fields\Extra::class,
+            Fields\Title::class,
+        ]);
+    }
 
 
 
 
 
-    
+
+
 }
